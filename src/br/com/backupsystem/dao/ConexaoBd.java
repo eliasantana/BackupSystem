@@ -25,6 +25,7 @@ public class ConexaoBd {
         String url = "jdbc:mysql://localhost:3306/dbbar?useTimezone=true&serverTimezone=UTC";
         String user = "root";
         String password = "202649";
+        //String password = "123456";
         
         try {
             Class.forName(driver);

@@ -22,6 +22,7 @@ public class TelaConsulta extends javax.swing.JFrame {
     TableModelAgendamento modelAgendamento = new TableModelAgendamento();
     Agendamento agendamento = new Agendamento();
     TelaBackupTray bkpTray;
+    String path="C:\\SysBar\\bkp_exec.txt";
     
     public TelaConsulta() {
         initComponents();
@@ -55,6 +56,7 @@ public class TelaConsulta extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tbAgendamento.setModel(new javax.swing.table.DefaultTableModel(
@@ -141,6 +143,7 @@ public class TelaConsulta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAlterarAgendamentoMouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        u.deletaArquivo(path);
         System.exit(0);
     }//GEN-LAST:event_jLabel1MouseClicked
     private int retornaValor(String valor) {

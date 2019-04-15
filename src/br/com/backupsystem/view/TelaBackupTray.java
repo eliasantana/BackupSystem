@@ -8,6 +8,7 @@ package br.com.backupsystem.view;
 import br.com.backupsystem.controler.ControlerAgenda;
 import br.com.backupsystem.dao.AutenticaUsuario;
 import br.com.backupsystem.dao.Backup;
+import br.com.backupsystem.utils.Utils;
 import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.SystemTray;
@@ -30,11 +31,12 @@ import javax.swing.JOptionPane;
  */
 public class TelaBackupTray extends javax.swing.JFrame {
 
-    /**
-     * Creates new form BackupTray
-     */
+    Utils u = new Utils();
+    
+    // Caminho para criação do arquivo que sinaliza a execução do módulo de backup.
+    String path="C:\\SysBar\\bkp_exec.txt";
+    
     ControlerAgenda ca = new ControlerAgenda();
-
     final SystemTray systemTray = SystemTray.getSystemTray();
     ArrayList<String> agendamento = ca.lerAgendamento();///Excluir 
     ArrayList<String> horarios = ca.lerAgendamento();
@@ -44,7 +46,7 @@ public class TelaBackupTray extends javax.swing.JFrame {
 
     public TelaBackupTray() {
         initComponents();
-        
+       
         moveToTray();
         long minutos = (60000);//Uma chacagem a cada 1Min
         Timer timer = new Timer();
@@ -52,7 +54,7 @@ public class TelaBackupTray extends javax.swing.JFrame {
         Calendar horaInicial = Calendar.getInstance();
 
         proxBackup = horaInicial.get(Calendar.HOUR_OF_DAY);
-        System.out.println("Próximo backup agendado para->: " + proxBackup);
+       
 
         TimerTask verificaAgenda = new TimerTask() {
 
@@ -60,10 +62,11 @@ public class TelaBackupTray extends javax.swing.JFrame {
             public void run() {
 
                 Calendar c = Calendar.getInstance();
+                
                 if (c.get(Calendar.HOUR_OF_DAY) <= 9 || c.get(Calendar.HOUR_OF_DAY) == 0) {
 
                     hora = "0" + String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":00:00");
-
+                    System.out.println("Horario: "+hora);
                 } else {
                     hora = String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":00:00");
                 }
@@ -88,6 +91,9 @@ public class TelaBackupTray extends javax.swing.JFrame {
                                 System.out.println(".run()"+" Erro ao realizar o Backup!");
                                 JOptionPane.showMessageDialog(null, ".run()"+" Erro ao realizar o Backup!");
                             }
+                            if (proxBackup==23){
+                                proxBackup=0;
+                            }
                         }
 
                     }
@@ -99,16 +105,14 @@ public class TelaBackupTray extends javax.swing.JFrame {
         };
 
         timer.scheduleAtFixedRate(verificaAgenda, 0, minutos);
-        //Recarregar lista as 00:00h
-        
-         
+        //Recarregar lista as 00:00h        
+       
          
     }
 
     private void moveToTray() {
         String caminho="C:\\SysBar\\masterfood6.png";
-        ImageIcon imageIcon = new ImageIcon(caminho);
-        //ImageIcon imageIcon = new ImageIcon("C:\\Users\\Elias Santana\\Documents\\NetBeansProjects\\BackupSystem\\src\\br\\com\\imagem\\masterfood6.png");
+        ImageIcon imageIcon = new ImageIcon(caminho);        
         Icon i = new ImageIcon(imageIcon.getImage());   
         
 
@@ -165,25 +169,35 @@ public class TelaBackupTray extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         txtSenha = new javax.swing.JPasswordField();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Senha");
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtSenhaKeyPressed(evt);
             }
         });
+        jPanel2.add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 67, 92, 30));
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("OK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 67, 60, 30));
+
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
         lblTitulo.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 14)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/imagem/cadeado2.png"))); // NOI18N
@@ -193,48 +207,30 @@ public class TelaBackupTray extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
         );
 
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 2, 169, -1));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Senha");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 47, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(174, 104));
@@ -293,6 +289,7 @@ public class TelaBackupTray extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
@@ -304,12 +301,13 @@ public class TelaBackupTray extends javax.swing.JFrame {
             txtSenha.setText(null);
             
             TelaConsulta c = new TelaConsulta();
-            c.setTitle("BackupSystem - Agendamento.");
+            c.setTitle("BackupSystem - Agendamento");
             c.recebeTela(this);
             c.setVisible(true);
 
         } else {
             moveToTray();
+            txtSenha.setText(null);
         }
     }
 }
