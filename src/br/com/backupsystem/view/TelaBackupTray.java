@@ -32,21 +32,22 @@ import javax.swing.JOptionPane;
 public class TelaBackupTray extends javax.swing.JFrame {
 
     Utils u = new Utils();
-    
+
     // Caminho para criação do arquivo que sinaliza a execução do módulo de backup.
-    String path="C:\\SysBar\\bkp_exec.txt";
-    
+    String path = "C:\\SysBar\\bkp_exec.txt";
+
     ControlerAgenda ca = new ControlerAgenda();
     final SystemTray systemTray = SystemTray.getSystemTray();
     ArrayList<String> agendamento = ca.lerAgendamento();///Excluir 
-    ArrayList<String> horarios = ca.lerAgendamento();
-   
+    //ArrayList<String> horarios = ca.lerAgendamento();
+    ArrayList<String> horarios;
+
     int proxBackup;
     String hora = null;
 
     public TelaBackupTray() {
         initComponents();
-       
+        horarios = ca.lerAgendamento();
         moveToTray();
         long minutos = (60000);//Uma chacagem a cada 1Min
         Timer timer = new Timer();
@@ -54,7 +55,6 @@ public class TelaBackupTray extends javax.swing.JFrame {
         Calendar horaInicial = Calendar.getInstance();
 
         proxBackup = horaInicial.get(Calendar.HOUR_OF_DAY);
-       
 
         TimerTask verificaAgenda = new TimerTask() {
 
@@ -62,11 +62,11 @@ public class TelaBackupTray extends javax.swing.JFrame {
             public void run() {
 
                 Calendar c = Calendar.getInstance();
-                
+
                 if (c.get(Calendar.HOUR_OF_DAY) <= 9 || c.get(Calendar.HOUR_OF_DAY) == 0) {
 
                     hora = "0" + String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":00:00");
-                    System.out.println("Horario: "+hora);
+                    System.out.println("Horario: " + hora);
                 } else {
                     hora = String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":00:00");
                 }
@@ -82,17 +82,21 @@ public class TelaBackupTray extends javax.swing.JFrame {
                             System.out.println("O Próximo backup será as ->: " + proxBackup + ":00:00");
                             horarios.remove(i);
                             System.out.println("Realizando Backup agrora->" + c.getTime());
-                            //mensagem("Realizando Backup agora!...");
+
                             Backup bkp = new Backup();
-                            
+
                             try {
                                 bkp.realizaBackup();
+                                TelaNotificacao tn = new TelaNotificacao();
+                                tn.mensagem("Backup realizado com sucesso!", "Aviso!");
+                                tn.setVisible(true);
+
                             } catch (IOException e) {
-                                System.out.println(".run()"+" Erro ao realizar o Backup!");
-                                JOptionPane.showMessageDialog(null, ".run()"+" Erro ao realizar o Backup!");
+                                System.out.println(".run()" + " Erro ao realizar o Backup!");
+                                JOptionPane.showMessageDialog(null, ".run()" + " Erro ao realizar o Backup - Contate o SUPORTE!");
                             }
-                            if (proxBackup==23){
-                                proxBackup=0;
+                            if (proxBackup == 23) {
+                                proxBackup = 0;
                             }
                         }
 
@@ -106,17 +110,15 @@ public class TelaBackupTray extends javax.swing.JFrame {
 
         timer.scheduleAtFixedRate(verificaAgenda, 0, minutos);
         //Recarregar lista as 00:00h        
-       
-         
+
     }
 
     private void moveToTray() {
-        String caminho="C:\\SysBar\\masterfood6.png";
-        ImageIcon imageIcon = new ImageIcon(caminho);        
-        Icon i = new ImageIcon(imageIcon.getImage());   
-        
+        String caminho = "C:\\SysBar\\masterfood6.png";
+        ImageIcon imageIcon = new ImageIcon(caminho);
+        Icon i = new ImageIcon(imageIcon.getImage());
 
-        if (!SystemTray.isSupported()) {            
+        if (!SystemTray.isSupported()) {
             JOptionPane.showMessageDialog(this, "O seu sistema operacional não suporta a execução!");
             return;
         }
@@ -147,17 +149,18 @@ public class TelaBackupTray extends javax.swing.JFrame {
             trayIcon.displayMessage("Aviso!", "Backup MasterFood sendo executado em segundo plano!", TrayIcon.MessageType.INFO);
         } catch (AWTException e) {
             System.out.println("br.com.backupsystem.view.TelaBackupTray.moveToTray()");
-            JOptionPane.showMessageDialog(null, "br.com.backupsystem.view.TelaBackupTray.moveToTray()"+e);
+            JOptionPane.showMessageDialog(null, "br.com.backupsystem.view.TelaBackupTray.moveToTray()" + e);
         }
 
     }
-    
-    public void atualizaHorario(){
-        horarios = ca.lerAgendamento();        
+
+    public void atualizaHorario() {
+        horarios = ca.lerAgendamento();
+        System.out.println("Horário atualizado-> " + horarios.toString());
     }
-    
-    public void mensagem(String mensagem){
-       
+
+    public void mensagem(String mensagem) {
+
     }
 
     /**
@@ -299,7 +302,7 @@ public class TelaBackupTray extends javax.swing.JFrame {
         if (auth.autentica("Admin".toLowerCase(), txtSenha.getText().toLowerCase())) {
             moveToTray();
             txtSenha.setText(null);
-            
+
             TelaConsulta c = new TelaConsulta();
             c.setTitle("BackupSystem - Agendamento");
             c.recebeTela(this);

@@ -105,7 +105,13 @@ public class TableModelAgendamento extends AbstractTableModel {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 //A coluna do status é 8
                 Object ref = table.getValueAt(row, 1);//Coluna qtd
-                Object ref2 = table.getValueAt(column, 1);//Coluna qtd
+                
+//                 Object ref2 = table.getValueAt(column, 2);//Coluna qtd               
+//                 System.out.println("Objeto: "+ref2);
+//                 if ("-".equals(ref2)||"OK".equals(ref2)){
+//                      setBackground(Color.blue);//Preenche a linha de vermelho
+//                      setForeground(Color.BLACK);//E a fonte de branco
+//                 }
                  
                 //Coloca cor em todas as linhas,COLUNA(8) que tem o valor "Pendente"
                 

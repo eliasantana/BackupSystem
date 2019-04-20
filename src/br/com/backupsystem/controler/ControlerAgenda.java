@@ -29,7 +29,7 @@ public class ControlerAgenda {
 
     public ArrayList<String> lerAgendamento() {
         String colunaDia = u.retornaDiaDaSemana();
-       
+        //System.out.println("Dia: " + colunaDia);
         ArrayList<String> listaAgendamento = new ArrayList<>();
         String sql = "SELECT " + colunaDia + ", hora, tipo FROM dbbar.tbagenda\n"
                 + "WHERE " + colunaDia + "=1 ORDER BY hora asc;";

@@ -200,7 +200,7 @@ public class TelaAlterarAgendamento extends javax.swing.JFrame {
                 lblSalvarMouseClicked(evt);
             }
         });
-        getContentPane().add(lblSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, 100, -1));
+        getContentPane().add(lblSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 230, 100, -1));
 
         setSize(new java.awt.Dimension(520, 314));
         setLocationRelativeTo(null);
