@@ -8,14 +8,12 @@ package br.com.backupsystem.utils;
 import br.com.backupsystem.view.Teste;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *

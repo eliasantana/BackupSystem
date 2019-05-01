@@ -47,6 +47,7 @@ public class TelaBackupTray extends javax.swing.JFrame {
 
     public TelaBackupTray() {
         initComponents();
+       
         horarios = ca.lerAgendamento();
         moveToTray();
         long minutos = (60000);//Uma chacagem a cada 1Min
@@ -54,8 +55,8 @@ public class TelaBackupTray extends javax.swing.JFrame {
         //horarios = ca.lerAgendamento();
         Calendar horaInicial = Calendar.getInstance();
 
-        proxBackup = horaInicial.get(Calendar.HOUR_OF_DAY);
-
+        proxBackup = horaInicial.get(Calendar.HOUR_OF_DAY)+1;
+       // System.out.println("Proximo Backup: "+ proxBackup+":00:00");
         TimerTask verificaAgenda = new TimerTask() {
 
             @Override
@@ -66,7 +67,7 @@ public class TelaBackupTray extends javax.swing.JFrame {
                 if (c.get(Calendar.HOUR_OF_DAY) <= 9 || c.get(Calendar.HOUR_OF_DAY) == 0) {
 
                     hora = "0" + String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":00:00");
-                    System.out.println("Horario: " + hora);
+                    System.out.println("Horario Atual: " + hora);
                 } else {
                     hora = String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":00:00");
                 }
@@ -181,6 +182,11 @@ public class TelaBackupTray extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -251,6 +257,11 @@ public class TelaBackupTray extends javax.swing.JFrame {
             iniciaAutenticacao();
         }
     }//GEN-LAST:event_txtSenhaKeyPressed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+         String caminho = "C:\\SysBar\\bkp_exec.txt";
+         u.deletaArquivo(caminho);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

@@ -57,6 +57,11 @@ public class TelaConsulta extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tbAgendamento.setModel(new javax.swing.table.DefaultTableModel(
@@ -146,6 +151,11 @@ public class TelaConsulta extends javax.swing.JFrame {
         u.deletaArquivo(path);
         System.exit(0);
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+       
+        
+    }//GEN-LAST:event_formWindowClosed
     private int retornaValor(String valor) {
         int set = 0;
         if (!"-".equals(valor)) {
